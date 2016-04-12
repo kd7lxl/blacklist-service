@@ -64,7 +64,7 @@ $ redis-server
 $ virtualenv env
 $ source env/bin/activate
 (env)$ pip install gevent redis
-(env)$ ./longpoll-server.py
+(env)$ ./blacklist-longpoll-server.py
 ```
 
 ### Mikrotik Edge Router
