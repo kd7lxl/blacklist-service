@@ -44,6 +44,7 @@ enabled  = true
 filter   = mikrotik-auth 
 logpath  = LOGPATH
 action   = hamwan-blacklist
+bantime  = 3
 ```
 
 ```bash
