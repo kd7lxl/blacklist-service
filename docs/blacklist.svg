@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg viewBox="0 0 1216 2113" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>seqdiag {
+    ER [label = "Edge Router\n(HTTP client)"]; Server [label = "HTTP Server\nblacklist-service.py"]; Redis; Fail2ban; Syslog; Router;
+    ER -&gt; Server [label = "GET /"];
+    ER &lt;- Server [label = "200 OK", noactivate, note = "longpoll wait begins"];
+          Server -&gt; Redis [label = "SUBSCRIBE blacklist"];
+                        ... wait for a login failure to be logged ...
+    Router -&gt;&gt; Syslog [label = "'login failure for user ...'", noactivate];
+               Syslog -&gt;&gt; Fail2ban [label = "first login failure"];
+                          Fail2ban -&gt; Fail2ban [label = "increment counter"];
+    Router -&gt;&gt; Syslog [label = "'login failure for user ...'", noactivate];
+               Syslog -&gt;&gt; Fail2ban [label = "second login failure", noactivate];
+                          Fail2ban -&gt; Fail2ban [label = "increment counter"];
+    Router -&gt;&gt; Syslog [label = "'login failure for user ...'", noactivate];
+               Syslog -&gt;&gt; Fail2ban [label = "third login failure", noactivate];
+                          Fail2ban -&gt; Fail2ban [label = "increment counter"];
+                          Fail2ban -&gt;&gt; Redis [label = "PUBLISH blacklist &lt;ip&gt;", noactivate];
+          Server &lt;- Redis;
+    ER &lt;-- Server [label = "&lt;ip&gt;"];
+                        ... fail2ban 'findtime' elapsed ...
+                          Fail2ban -&gt; Fail2ban [label = "reset counter", activate]
+                        === timeout example - no addresses to ban before timeout window expires ===
+    ER -&gt; Server [label = "GET /"];
+    ER &lt;- Server [label = "200 OK", noactivate];
+                            Server -&gt; Redis [label = "SUBSCRIBE blacklist"];
+                        ... wait for a login failure to be logged ...
+                            Server -&gt; Server [label = "timeout"]
+    ER &lt;-- Server [label = "192.0.2.0", note = "valid but benign '192.0.2.0' added to ban list"];
+}</desc>
+  <rect fill="rgb(0,0,0)" height="1950" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="127" y="141" />
+  <rect fill="rgb(0,0,0)" height="1169" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="141" />
+  <rect fill="rgb(0,0,0)" height="399" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="319" y="1630" />
+  <rect fill="rgb(0,0,0)" height="946" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="269" />
+  <rect fill="rgb(0,0,0)" height="302" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="511" y="1789" />
+  <rect fill="rgb(0,0,0)" height="1579" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="8" x="703" y="512" />
+  <polygon fill="rgb(0,0,0)" points="339,197 452,197 460,205 460,213 339,213 339,197" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <polygon fill="rgb(0,0,0)" points="339,2021 586,2021 594,2029 594,2037 339,2037 339,2021" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="67" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="259" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="451" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="643" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="835" y="46" />
+  <rect fill="rgb(0,0,0)" height="40" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" width="128" x="1027" y="46" />
+  <path d="M 128 80 L 128 329" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 128 337 L 128 361" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 128 369 L 128 1369" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 128 1377 L 128 1401" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 128 1409 L 128 1849" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 128 1857 L 128 1881" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 128 1889 L 128 2101" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="1950" stroke="rgb(0,0,0)" width="8" x="124" y="135" />
+  <path d="M 320 80 L 320 329" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 320 337 L 320 361" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 320 369 L 320 1369" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 320 1377 L 320 1401" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 320 1409 L 320 1849" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 320 1857 L 320 1881" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 320 1889 L 320 2101" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="1169" stroke="rgb(0,0,0)" width="8" x="316" y="135" />
+  <rect fill="moccasin" height="399" stroke="rgb(0,0,0)" width="8" x="316" y="1624" />
+  <path d="M 512 80 L 512 329" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 512 337 L 512 361" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 512 369 L 512 1369" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 512 1377 L 512 1401" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 512 1409 L 512 1849" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 512 1857 L 512 1881" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 512 1889 L 512 2101" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="946" stroke="rgb(0,0,0)" width="8" x="508" y="263" />
+  <rect fill="moccasin" height="302" stroke="rgb(0,0,0)" width="8" x="508" y="1783" />
+  <path d="M 704 80 L 704 329" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 704 337 L 704 361" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 704 369 L 704 1369" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 704 1377 L 704 1401" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 704 1409 L 704 1849" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 704 1857 L 704 1881" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 704 1889 L 704 2101" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="moccasin" height="1579" stroke="rgb(0,0,0)" width="8" x="700" y="506" />
+  <path d="M 896 80 L 896 329" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 896 337 L 896 361" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 896 369 L 896 1369" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 896 1377 L 896 1401" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 896 1409 L 896 1849" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 896 1857 L 896 1881" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 896 1889 L 896 2101" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 1088 80 L 1088 329" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 1088 337 L 1088 361" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 1088 369 L 1088 1369" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 1088 1377 L 1088 1401" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 1088 1409 L 1088 1849" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <path d="M 1088 1857 L 1088 1881" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="2 8" />
+  <path d="M 1088 1889 L 1088 2101" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="8 4" />
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="64" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="61" x="128" y="60">Edge Router</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="71" x="128" y="73">(HTTP client)</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="256" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="66" x="320" y="58">HTTP Server</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="96" x="320" y="72">blacklist-service.py</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="448" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="27" x="512" y="65">Redis</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="640" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="41" x="704" y="65">Fail2ban</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="832" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="32" x="896" y="67">Syslog</text>
+  <rect fill="rgb(255,255,255)" height="40" stroke="rgb(0,0,0)" width="128" x="1024" y="40" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="33" x="1088" y="65">Router</text>
+  <path d="M 136 135 L 312 135" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,131 312,135 304,139" stroke="rgb(0,0,0)" />
+  <path d="M 136 199 L 312 199" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="144,195 136,199 144,203" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="336,191 449,191 457,199 457,207 336,207 336,191" stroke="rgb(0,0,0)" />
+  <path d="M 449 191 L 449 199" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 449 199 L 457 199" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="97" x="392" y="205">longpoll wait begins</text>
+  <path d="M 328 263 L 504 263" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,259 504,263 496,267" stroke="rgb(0,0,0)" />
+  <path d="M 904 426 L 1080 426" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 912 422 L 904 426" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 904 426 L 912 430" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 506 L 888 506" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 720 502 L 712 506" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 506 L 720 510" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 583 L 800 583" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 583 L 800 599" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 599 L 712 599" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="720,595 712,599 720,603" stroke="rgb(0,0,0)" />
+  <path d="M 904 666 L 1080 666" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 912 662 L 904 666" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 904 666 L 912 670" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 746 L 888 746" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 720 742 L 712 746" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 746 L 720 750" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 823 L 800 823" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 823 L 800 839" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 839 L 712 839" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="720,835 712,839 720,843" stroke="rgb(0,0,0)" />
+  <path d="M 904 906 L 1080 906" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 912 902 L 904 906" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 904 906 L 912 910" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 986 L 888 986" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 720 982 L 712 986" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 986 L 720 990" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 712 1063 L 800 1063" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 1063 L 800 1079" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 1079 L 712 1079" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="720,1075 712,1079 720,1083" stroke="rgb(0,0,0)" />
+  <path d="M 520 1144 L 696 1144" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 528 1140 L 520 1144" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 520 1144 L 528 1148" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 328 1209 L 504 1209" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="336,1205 328,1209 336,1213" stroke="rgb(0,0,0)" />
+  <path d="M 136 1304 L 312 1304" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,1300 136,1304 144,1308" stroke="rgb(0,0,0)" />
+  <path d="M 712 1463 L 800 1463" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 1463 L 800 1479" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 800 1479 L 712 1479" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="720,1475 712,1479 720,1483" stroke="rgb(0,0,0)" />
+  <path d="M 136 1624 L 312 1624" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="304,1620 312,1624 304,1628" stroke="rgb(0,0,0)" />
+  <path d="M 136 1703 L 312 1703" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="144,1699 136,1703 144,1707" stroke="rgb(0,0,0)" />
+  <path d="M 328 1783 L 504 1783" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="496,1779 504,1783 496,1787" stroke="rgb(0,0,0)" />
+  <path d="M 328 1943 L 416 1943" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 1943 L 416 1959" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 416 1959 L 328 1959" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="336,1955 328,1959 336,1963" stroke="rgb(0,0,0)" />
+  <path d="M 136 2023 L 312 2023" fill="none" stroke="rgb(0,0,0)" stroke-dasharray="4" />
+  <polygon fill="rgb(0,0,0)" points="144,2019 136,2023 144,2027" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(255,182,193)" points="336,2015 583,2015 591,2023 591,2031 336,2031 336,2015" stroke="rgb(0,0,0)" />
+  <path d="M 583 2015 L 583 2023" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 583 2023 L 591 2023" fill="none" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="231" x="459" y="2029">valid but benign '192.0.2.0' added to ban list</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="31" x="155" y="133">GET /</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="41" x="291" y="197">200 OK</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="102" x="383" y="261">SUBSCRIBE blacklist</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="123" x="1018" y="424">'login failure for user ...'</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="79" x="848" y="504">first login failure</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="92" x="758" y="581">increment counter</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="123" x="1018" y="664">'login failure for user ...'</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="95" x="840" y="744">second login failure</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="92" x="758" y="821">increment counter</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="123" x="1018" y="904">'login failure for user ...'</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="82" x="847" y="984">third login failure</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="92" x="758" y="1061">increment counter</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="112" x="640" y="1142">PUBLISH blacklist &lt;ip&gt;</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="20" x="302" y="1302">&lt;ip&gt;</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="67" x="745" y="1461">reset counter</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="31" x="155" y="1622">GET /</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="41" x="291" y="1701">200 OK</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="102" x="383" y="1781">SUBSCRIBE blacklist</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="38" x="347" y="1941">timeout</text>
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="54" x="285" y="2021">192.0.2.0</text>
+  <rect fill="white" height="21" stroke="white" width="195" x="510" y="338" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="175" x="607" y="355">wait for a login failure to be logged</text>
+  <rect fill="white" height="20" stroke="white" width="152" x="532" y="1379" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="132" x="608" y="1395">fail2ban 'findtime' elapsed</text>
+  <path d="M 40 1547 L 418 1547" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 40 1551 L 418 1551" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 797 1547 L 1176 1547" fill="none" stroke="rgb(0,0,0)" />
+  <path d="M 797 1551 L 1176 1551" fill="none" stroke="rgb(0,0,0)" />
+  <rect fill="rgb(208,208,208)" height="20" stroke="rgb(0,0,0)" width="379" x="418" y="1539" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="359" x="607" y="1555">timeout example - no addresses to ban before timeout window expires</text>
+  <rect fill="white" height="21" stroke="white" width="195" x="510" y="1858" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="175" x="607" y="1875">wait for a login failure to be logged</text>
+</svg>

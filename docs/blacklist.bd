@@ -1,0 +1,28 @@
+seqdiag {
+    ER [label = "Edge Router\n(HTTP client)"]; Server [label = "HTTP Server\nblacklist-service.py"]; Redis; Fail2ban; Syslog; Router;
+    ER -> Server [label = "GET /"];
+    ER <- Server [label = "200 OK", noactivate, note = "longpoll wait begins"];
+          Server -> Redis [label = "SUBSCRIBE blacklist"];
+                        ... wait for a login failure to be logged ...
+    Router ->> Syslog [label = "'login failure for user ...'", noactivate];
+               Syslog ->> Fail2ban [label = "first login failure"];
+                          Fail2ban -> Fail2ban [label = "increment counter"];
+    Router ->> Syslog [label = "'login failure for user ...'", noactivate];
+               Syslog ->> Fail2ban [label = "second login failure", noactivate];
+                          Fail2ban -> Fail2ban [label = "increment counter"];
+    Router ->> Syslog [label = "'login failure for user ...'", noactivate];
+               Syslog ->> Fail2ban [label = "third login failure", noactivate];
+                          Fail2ban -> Fail2ban [label = "increment counter"];
+                          Fail2ban ->> Redis [label = "PUBLISH blacklist <ip>", noactivate];
+          Server <- Redis;
+    ER <-- Server [label = "<ip>"];
+                        ... fail2ban 'findtime' elapsed ...
+                          Fail2ban -> Fail2ban [label = "reset counter", activate]
+                        === timeout example - no addresses to ban before timeout window expires ===
+    ER -> Server [label = "GET /"];
+    ER <- Server [label = "200 OK", noactivate];
+                            Server -> Redis [label = "SUBSCRIBE blacklist"];
+                        ... wait for a login failure to be logged ...
+                            Server -> Server [label = "timeout"]
+    ER <-- Server [label = "192.0.2.0", note = "valid but benign '192.0.2.0' added to ban list"];
+}
