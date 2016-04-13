@@ -69,28 +69,42 @@ $ source env/bin/activate
 
 ### Mikrotik Edge Router
 
+#### Create the script
+
 ```
 /system script add name=block-address
 /system script edit block-address source
 ```
 
+Paste this:
 ```
 :while ( true ) do={
-:do { /tool fetch url=http://YOURHTTPSERVER }
-:local content [/file get [/file find name=blacklist] contents] ;
-/ip firewall address-list remove [find list=blacklist address=$content]
-/ip firewall address-list add list=blacklist timeout=1w address=$content
-:delay 3
+    :do {
+        /tool fetch url=https://YOURHTTPSERVER/ dst-path=blacklist
+        :local content [/file get [/file find name=blacklist] contents] ;
+        /ip firewall address-list remove [find list=blacklist address=$content]
+        /ip firewall address-list add list=blacklist timeout=1d address=$content
+        :put "Blocked $content"
+    } on-error={
+        :put "Fetch error"
+        :delay 3
+    }
 };
 ```
+Be sure to change `YOURHTTPSERVER` to target your longpoll HTTP server.
 
-Firewall rule:
+If you have implemented an HTTPS server, don't forget to add the certs to your
+router and `check-certificate=yes` to the script--certificates are not verified
+by default!
+
+#### Add firewall rule
 
 ```
-/ip firewall filter add action=drop chain=input src-address-list=blacklist place-before=1
+/ip firewall filter add action=drop chain=forward src-address-list=blacklist place-before=1
 ```
+Suggestion: add a whitelist rule before this to avoid locking yourself out.
 
-Schedule it to run at startup:
+#### Schedule script to run at startup
 
 ```
 /system schedule add name=block-address on-event=block-address start-time=startup
