@@ -5,27 +5,7 @@ monkey.patch_all()
 
 import gevent
 from gevent import pywsgi
-from gevent import queue
 import redis
-
-
-def process_messages(body):
-    server = redis.Redis(host='localhost', port=6379, db=0)
-    client = server.pubsub()
-    client.subscribe('blacklist')
-    while True:
-        message = client.get_message(timeout=25.0)
-        if message is None:
-            body.put("# timeout")
-            body.put("# timeout")
-            break
-        elif message['type'] == 'message':
-            # Send it twice: once for the data, second for the content-length. WTF
-            body.put("%s" % message['data'])
-            body.put("%s" % message['data'])
-            break
-    client.close()
-    body.put(StopIteration)
 
 
 def handle(environ, start_response):
@@ -33,9 +13,22 @@ def handle(environ, start_response):
         ('Content-Type', 'text/plain'),
         ('Connection', 'close'),
     ])
-    body = queue.Queue()
-    gevent.spawn(process_messages, body)
-    return body
+    server = redis.Redis(host='localhost', port=6379, db=0)
+    client = server.pubsub()
+    client.subscribe('blacklist')
+
+    content = ""
+
+    while True:
+        message = client.get_message(timeout=25.0)
+        if message is None:
+            content = "# timeout"
+            break
+        elif message['type'] == 'message':
+            content = message['data']
+            break
+    client.close()
+    return content
 
 
 server = pywsgi.WSGIServer(('127.0.0.1', 1234), handle)
