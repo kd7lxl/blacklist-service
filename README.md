@@ -69,29 +69,16 @@ $ source env/bin/activate
 
 ### Mikrotik Edge Router
 
-#### Create the script
+#### Import the script
 
-```
-/system script add name=block-address
-/system script edit block-address source
-```
+Open `block-address.rsc` for editing and change `YOURHTTPSERVER` to target your
+longpoll HTTP server.
 
-Paste this:
+Now upload and install it:
 ```
-:while ( true ) do={
-    :do {
-        /tool fetch url=https://YOURHTTPSERVER/ dst-path=blacklist
-        :local content [/file get [/file find name=blacklist] contents] ;
-        /ip firewall address-list remove [find list=blacklist address=$content]
-        /ip firewall address-list add list=blacklist timeout=1d address=$content
-        :put "Blocked $content"
-    } on-error={
-        :put "Fetch error"
-        :delay 3
-    }
-};
+scp block-address.rsc edgerouter:
+ssh edgerouter "import block-address.rsc"
 ```
-Be sure to change `YOURHTTPSERVER` to target your longpoll HTTP server.
 
 If you have implemented an HTTPS server, don't forget to add the certs to your
 router and `check-certificate=yes` to the script--certificates are not verified
