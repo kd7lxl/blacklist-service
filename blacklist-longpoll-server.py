@@ -16,9 +16,8 @@ def process_messages(body):
     while True:
         message = client.get_message(timeout=25.0)
         if message is None:
-            # timeout - send something valid but benign, such as a TESTNET address
-            body.put("192.0.2.0")
-            body.put("192.0.2.0")
+            body.put("# timeout")
+            body.put("# timeout")
             break
         elif message['type'] == 'message':
             # Send it twice: once for the data, second for the content-length. WTF
