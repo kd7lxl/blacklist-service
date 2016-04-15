@@ -24,6 +24,7 @@ def process_messages(body):
             body.put("%s" % message['data'])
             body.put("%s" % message['data'])
             break
+    client.close()
     body.put(StopIteration)
 
 
