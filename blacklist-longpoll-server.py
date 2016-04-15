@@ -14,7 +14,7 @@ def process_messages(body):
     client = server.pubsub()
     client.subscribe('blacklist')
     while True:
-        message = client.get_message(timeout=900.0)
+        message = client.get_message(timeout=25.0)
         if message is None:
             # timeout - send something valid but benign, such as a TESTNET address
             body.put("192.0.2.0")
