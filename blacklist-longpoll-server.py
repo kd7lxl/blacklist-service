@@ -17,22 +17,24 @@ def handle(environ, start_response):
     client = server.pubsub()
     client.subscribe('blacklist')
 
-    content = ""
+    yield "# longpoll begin\n"
 
-    while True:
-        message = client.get_message(timeout=25.0)
+    for i in xrange(100):
+        # Mikrotik 6.39+ times out if no data is received for 5 seconds
+        message = client.get_message(timeout=4.0)
         if message is None:
-            content = "# timeout"
-            break
+            yield "# longpoll wait\n"
         elif message['type'] == 'message':
-            content = message['data']
+            yield message['data'] + "\n"
             break
+    else:
+        yield "# longpoll timeout\n"
     client.close()
-    return content
 
 
-server = pywsgi.WSGIServer(('127.0.0.1', 1234), handle)
-print "Serving on http://127.0.0.1:1234..."
+bind = ('127.0.0.1', 1234)
+server = pywsgi.WSGIServer(bind, handle)
+print "Serving on http://%s:%d..." % bind
 try:
     server.serve_forever()
 except KeyboardInterrupt:
