@@ -26,9 +26,9 @@ address list
 ## Installation
 
 It is assumed you already have your Mikrotik devices logging to a central
-syslog server into a file at `LOGPATH`.
+syslog server into a file at `LOGPATH`. Install the following on this server.
 
-### fail2ban
+### Prerequisite: fail2ban
 
 ```bash
 $ sudo apt-get install fail2ban
@@ -51,21 +51,41 @@ bantime  = 3
 $ sudo service fail2ban reload
 ```
 
-### Redis
+### Blacklist service
+
+The blacklist service depends on Redis. Redis and the blacklist service can be installed standalone or via docker.
+
+### Standalone
+
+#### Redis
 
 ```bash
 $ sudo apt-get install redis-server
 $ redis-server
 ```
 
-### Longpoll HTTP server
+#### Longpoll HTTP server
 
 ```bash
-$ virtualenv env
-$ source env/bin/activate
-(env)$ pip install gevent redis
+git clone https://github.com/kd7lxl/blacklist-service.git
+cd blacklist-service
+virtualenv env
+source env/bin/activate
+(env)$ pip install -r requirements.txt
 (env)$ ./blacklist-longpoll-server.py
 ```
+
+Don't forget to add startup hooks to launch this at boot.
+
+### Docker
+
+```bash
+git clone https://github.com/kd7lxl/blacklist-service.git
+cd blacklist-sevice
+docker-compose up -d
+```
+
+That's it! Redis and the blacklist service will now start at boot.
 
 ### Mikrotik Edge Router
 

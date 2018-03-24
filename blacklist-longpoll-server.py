@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+import os
+
 from gevent import monkey
 monkey.patch_all()
 
@@ -13,7 +15,8 @@ def handle(environ, start_response):
         ('Content-Type', 'text/plain'),
         ('Connection', 'close'),
     ])
-    server = redis.Redis(host='localhost', port=6379, db=0)
+    server = redis.Redis(host=os.environ.get("REDIS_HOST", "localhost"),
+                         port=6379, db=0)
     client = server.pubsub()
     client.subscribe('blacklist')
 
@@ -32,7 +35,7 @@ def handle(environ, start_response):
     client.close()
 
 
-bind = ('127.0.0.1', 1234)
+bind = ('0.0.0.0', 1234)
 server = pywsgi.WSGIServer(bind, handle)
 print "Serving on http://%s:%d..." % bind
 try:
