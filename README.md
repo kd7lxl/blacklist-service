@@ -82,7 +82,7 @@ Don't forget to add startup hooks to launch this at boot.
 ```bash
 git clone https://github.com/kd7lxl/blacklist-service.git
 cd blacklist-sevice
-docker-compose up -d
+docker compose up -d
 ```
 
 That's it! Redis and the blacklist service will now start at boot.
