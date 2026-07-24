@@ -23,6 +23,9 @@ adds the address to a address list
 * A Mikrotik firewall rule to block traffic where source is the blacklist
 address list
 
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a system diagram and
+sequence diagram of how these components interact.
+
 ## Installation
 
 It is assumed you already have your Mikrotik devices logging to a central
