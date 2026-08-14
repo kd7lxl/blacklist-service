@@ -18,21 +18,22 @@ def handle(environ, start_response):
     server = redis.Redis(host=os.environ.get("REDIS_HOST", "localhost"),
                          port=6379, db=0)
     client = server.pubsub()
-    client.subscribe('blacklist')
-
-    yield "# longpoll begin\n"
-
-    for i in xrange(100):
-        # Mikrotik 6.39+ times out if no data is received for 5 seconds
-        message = client.get_message(timeout=4.0)
-        if message is None:
-            yield "# longpoll wait\n"
-        elif message['type'] == 'message':
-            yield message['data'] + "\n"
-            break
-    else:
-        yield "# longpoll timeout\n"
-    client.close()
+    try:
+        client.subscribe('blacklist')
+        yield "# longpoll begin\n"
+        with gevent.Timeout(60, False):
+            for i in xrange(100):
+                message = client.get_message(timeout=4.0)
+                if message is None:
+                    yield "# longpoll wait\n"
+                elif message['type'] == 'message':
+                    yield message['data'] + "\n"
+                    break
+                else:
+                    yield "# longpoll timeout\n"
+    finally:
+        client.close()
+        server.connection_pool.disconnect()
 
 
 bind = ('0.0.0.0', 1234)
